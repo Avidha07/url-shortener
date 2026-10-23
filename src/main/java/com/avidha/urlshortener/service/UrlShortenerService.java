@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.avidha.urlshortener.entity.UrlMapping;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
+import java.util.UUID;
 
 @Service
 public class UrlShortenerService {
@@ -17,8 +18,16 @@ public class UrlShortenerService {
         this.urlMappingRepository = urlMappingRepository;
     }
 
-    public UrlMapping createShortUrl(String originalUrl, String shortCode) {
-        UrlMapping urlMapping = new UrlMapping(originalUrl, shortCode);
+    public UrlMapping createShortUrl(String originalUrl) {
+        String shortCode;
+
+        do {
+            shortCode = generateShortCode();
+        } while (urlMappingRepository.findByShortCode(shortCode).isPresent());
+
+        UrlMapping urlMapping =
+                new UrlMapping(originalUrl, shortCode);
+
         return urlMappingRepository.save(urlMapping);
     }
 
@@ -29,5 +38,11 @@ public class UrlShortenerService {
                                 HttpStatus.NOT_FOUND,
                                 "Short URL not found"
                         ));
+    }
+    private String generateShortCode() {
+        return UUID.randomUUID()
+                .toString()
+                .replace("-", "")
+                .substring(0, 7);
     }
 }

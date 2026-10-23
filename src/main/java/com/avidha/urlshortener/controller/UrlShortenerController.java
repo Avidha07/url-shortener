@@ -17,14 +17,13 @@ public class UrlShortenerController {
         this.urlShortenerService = urlShortenerService;
     }
 
+
     @PostMapping
     public ResponseEntity<UrlMapping> createShortUrl(
-            @RequestParam String originalUrl,
-            @RequestParam String shortCode) {
+            @RequestParam String originalUrl) {
 
         UrlMapping urlMapping =
-                urlShortenerService.createShortUrl(
-                        originalUrl, shortCode);
+                urlShortenerService.createShortUrl(originalUrl);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
