@@ -5,9 +5,12 @@ import com.avidha.urlshortener.service.UrlShortenerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.constraints.NotBlank;
+import org.springframework.validation.annotation.Validated;
 
 @RestController
 @RequestMapping("/api/urls")
+@Validated
 public class UrlShortenerController {
 
     private final UrlShortenerService urlShortenerService;
@@ -20,7 +23,13 @@ public class UrlShortenerController {
 
     @PostMapping
     public ResponseEntity<UrlMapping> createShortUrl(
-            @RequestParam String originalUrl) {
+            @RequestParam
+            @NotBlank(message = "Original URL must not be blank")
+            @jakarta.validation.constraints.Pattern(
+                    regexp = "^https?://.+$",
+                    message = "Original URL must start with http:// or https://"
+            )
+            String originalUrl) {
 
         UrlMapping urlMapping =
                 urlShortenerService.createShortUrl(originalUrl);
