@@ -1,14 +1,15 @@
+
 # URL Shortener
 
 A backend URL Shortener application built using Java, Spring Boot, and PostgreSQL.
 
 ## Features
 
-- Create short URLs with automatically generated short codes.
+- Create short URLs using a JSON request body.
+- Generate unique short codes automatically.
 - Store URL mappings in PostgreSQL.
-- Redirect short URLs to original URLs.
-- Validate URLs to accept only HTTP and HTTPS links.
-- Return appropriate error responses for invalid URLs and unknown short codes.
+- Redirect short URLs to their original URLs.
+- Validate URLs and return consistent error responses.
 
 ## Tech Stack
 
@@ -23,26 +24,45 @@ A backend URL Shortener application built using Java, Spring Boot, and PostgreSQ
 
 | Method | Endpoint | Description |
 |---|---|---|
-| POST | `/api/urls?originalUrl=https://www.wikipedia.org` | Create a short URL |
+| POST | `/api/urls` | Create a short URL |
 | GET | `/api/urls/{shortCode}` | Redirect to the original URL |
 
-## Example
+## Create a Short URL
 
-Create a short URL:
+**Request**
 
-`POST /api/urls?originalUrl=https://www.wikipedia.org`
+`POST /api/urls`
 
-The API returns `201 Created` with the generated short code.
+Content-Type: `application/json`
 
-Redirect:
+```json
+{
+  "originalUrl": "https://www.wikipedia.org"
+}
+```
 
-`GET /api/urls/{shortCode}`
+**Response — 201 Created**
 
-The API returns `302 Found` and redirects to the original URL.
+```json
+{
+  "id": 8,
+  "originalUrl": "https://www.wikipedia.org",
+  "shortCode": "3e8751a",
+  "shortUrl": "http://localhost:8080/api/urls/3e8751a"
+}
+```
+
+## Redirect to Original URL
+
+**Request**
+
+`GET /api/urls/3e8751a`
+
+The API returns `302 Found` and redirects to the original URL using the `Location` header.
 
 ## Error Handling
 
-- `400 Bad Request` — Invalid or blank URL.
+- `400 Bad Request` — Blank or invalid URL.
 - `404 Not Found` — Short code does not exist.
 
 ## Run Locally
@@ -56,4 +76,4 @@ The application runs at `http://localhost:8080`.
 
 ## Testing
 
-API endpoints and error responses were tested using Postman.
+API endpoints, URL validation, redirect behavior, and error responses were tested using Postman.
