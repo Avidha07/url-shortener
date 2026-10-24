@@ -33,7 +33,7 @@ public class UrlShortenerController {
                 );
 
         String shortUrl =
-                "http://localhost:8080/api/urls/"
+                "http://localhost:8080/"
                         + urlMapping.getShortCode();
 
         CreateUrlResponse response = new CreateUrlResponse(
@@ -46,22 +46,5 @@ public class UrlShortenerController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(response);
-    }
-
-    @GetMapping("/{shortCode}")
-    public ResponseEntity<Void> redirectToOriginalUrl(
-            @PathVariable String shortCode) {
-
-        UrlMapping urlMapping =
-                urlShortenerService.getByShortCode(shortCode);
-
-        return ResponseEntity
-                .status(HttpStatus.FOUND)
-                .location(
-                        java.net.URI.create(
-                                urlMapping.getOriginalUrl()
-                        )
-                )
-                .build();
     }
 }

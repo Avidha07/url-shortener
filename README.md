@@ -20,12 +20,13 @@ A backend URL Shortener application built using Java, Spring Boot, and PostgreSQ
 - Maven
 - Postman
 
+
 ## API Endpoints
 
 | Method | Endpoint | Description |
 |---|---|---|
 | POST | `/api/urls` | Create a short URL |
-| GET | `/api/urls/{shortCode}` | Redirect to the original URL |
+| GET | `/{shortCode}` | Redirect to the original URL |
 
 ## Create a Short URL
 
@@ -52,11 +53,14 @@ Content-Type: `application/json`
 }
 ```
 
+
 ## Redirect to Original URL
 
 **Request**
 
-`GET /api/urls/3e8751a`
+`GET /3e8751a`
+
+The short URL is `http://localhost:8080/3e8751a`.
 
 The API returns `302 Found` and redirects to the original URL using the `Location` header.
 
